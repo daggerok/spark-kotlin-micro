@@ -1,0 +1,15 @@
+version: '2'
+services:
+  app:
+    container_name: app
+    image: frolvlad/alpine-oraclejdk8:slim
+    command: sh -c 'java -jar /opt/*.jar'
+    networks:
+      - net
+    ports:
+      - 80:8080
+    volumes:
+      - ./../../../../build/libs:/opt:ro
+networks:
+  net:
+    driver: bridge

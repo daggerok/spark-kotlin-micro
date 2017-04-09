@@ -1,0 +1,25 @@
+version '0.0.1'
+
+// fucking windows paths...
+def root = rootDir.absolutePath.replaceAll("\\\\", '/')
+def composePrefix = "docker-compose --project-name app -f $root/docker/src/main/docker"
+
+task composeBuild(type: Exec) {
+  executable 'bash'
+  args '-c', "$composePrefix/docker-compose-build.yml build --force-rm"
+}
+
+task composeRun(type: Exec) {
+  executable 'bash'
+  args '-c', "$composePrefix/docker-compose.yml run -d -p 80:8080 app"
+}
+
+task composeUp(type: Exec) {
+  executable 'bash'
+  args '-c', "$composePrefix/docker-compose.yml up"
+}
+
+task composeDown(type: Exec) {
+  executable 'bash'
+  args '-c', "$composePrefix/docker-compose.yml down -v --remove-orphans"
+}

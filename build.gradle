@@ -1,0 +1,46 @@
+plugins {
+  id 'idea'
+  id 'application'
+  id 'org.jetbrains.kotlin.jvm' version '1.1.1'
+  //id 'org.jetbrains.kotlin.kapt' version '1.1.1'
+}
+
+version '0.0.1'
+group 'daggerok'
+
+def entry = 'daggerok.AppKt'
+
+mainClassName = entry
+
+jar {
+  manifest { attributes 'Main-Class': entry }
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+defaultTasks 'run'
+
+ext {
+  kotlinVersion = '1.1.1'
+  sparkjavaVersion = '2.5.5'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion",
+      "com.sparkjava:spark-core:$sparkjavaVersion",
+      "com.sparkjava:spark-template-handlebars:$sparkjavaVersion",
+      'org.slf4j:slf4j-simple:1.7.21',
+      'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.7'
+}
+
+sourceSets {
+  main.kotlin.srcDirs += 'src'
+  //main.java.srcDirs += 'src/java'
+}
+
+kotlin {
+  experimental { coroutines 'enable' }
+}

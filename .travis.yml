@@ -1,0 +1,34 @@
+sudo: required
+dist: trusty
+language: java
+jsdk: oraclejdk8
+install: true
+env:
+  DOCKER_COMPOSE_VERSION: 1.12.0
+before_install:
+#  # chrome
+#  - export CHROME_BIN=/usr/bin/google-chrome
+#  - export DISPLAY=:99.0
+#  - sh -e /etc/init.d/xvfb start
+#  - sudo apt update
+#  - sudo apt install -y libappindicator1 fonts-liberation
+#  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#  - sudo dpkg -i google-chrome*.deb
+  # docker
+  - sudo rm /usr/local/bin/docker-compose
+  - export DOCKER_COPOSE_URL=https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)
+  - echo using\ $DOCKER_COPOSE_URL
+  - curl -L $DOCKER_COPOSE_URL > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+script:
+  - gradle clean build
+  - gradle composeBuild
+  - gradle composeRun
+  - gradle composeDown
+after_script:
+  - gradle --stop
+cache:
+  directories:
+    - ~/.gradle
+    - ~/.m2
